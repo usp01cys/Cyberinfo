@@ -1,915 +1,1086 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Security | USP Multan — Made by Subhan</title>
+    <title>Cyber Puzzles - C++ Learning Hub</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
                     colors: {
-                        cyber: {
-                            bg: '#060b19',
-                            card: '#0d152a',
-                            border: '#1e293b',
-                            cyan: '#00f0ff',
-                            emerald: '#10b981',
-                            danger: '#ff2a5f',
-                            gold: '#f5b800',
-                            navy: '#0a2240'
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 4s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
+                        pastelBg: '#f8fafc',
+                        cardBg: '#ffffff',
+                        accentBlue: '#3b82f6',
+                        accentGreen: '#10b981',
+                        accentPurple: '#8b5cf6',
+                        accentPink: '#ec4899',
                     }
                 }
             }
         }
     </script>
+    <!-- Google Fonts: Inter & Fira Code -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom subtle scrollbars & glow utilities */
         body {
-            background-color: #060b19;
-            color: #f8fafc;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
+            color: #1e293b;
         }
-        .cyber-grid-bg {
-            background-image: 
-                linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
-            background-size: 40px 40px;
+        .code-font {
+            font-family: 'Fira Code', monospace;
         }
-        .glow-cyan {
-            box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+        .human-card {
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+            transition: all 0.2s ease;
         }
-        .glow-gold {
-            box-shadow: 0 0 20px rgba(245, 184, 0, 0.25);
+        .human-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
         }
-        .glow-danger {
-            box-shadow: 0 0 25px rgba(255, 42, 95, 0.25);
-        }
-        .glow-emerald {
-            box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
-        }
-        /* Animated SVG path dash */
-        @keyframes flowPacket {
-            to {
-                stroke-dashoffset: -40;
-            }
-        }
-        .packet-line {
-            stroke-dasharray: 8 12;
-            animation: flowPacket 1.2s linear infinite;
+        /* Custom smooth scroll */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body class="cyber-grid-bg min-h-screen flex flex-col justify-between selection:bg-cyber-cyan selection:text-cyber-bg">
+<body class="min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-700">
 
-    <!-- ==================== TOP NAVBAR (USP LOGO TOP-LEFT & MADE BY SUBHAN) ==================== -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-[#060b19]/85 border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            
-            <!-- TOP-LEFT: University of Southern Punjab (USP) Logo + Label -->
-            <div class="flex items-center gap-3 sm:gap-4">
-                <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr from-cyber-gold via-yellow-300 to-cyber-gold glow-gold flex-shrink-0 overflow-hidden">
-                    <!-- Uses uploaded 'images (2).jfif' first, with an instant high-detail USP Multan SVG fallback -->
-                    <img 
-                        src="images (2).jfif" 
-                        alt="University of Southern Punjab Logo" 
-                        class="w-full h-full object-cover rounded-full bg-white"
-                        onerror="this.style.display='none'; document.getElementById('usp-fallback-svg').classList.remove('hidden');"
-                    >
-                    <!-- High-Detail Crisp SVG Replica of USP Multan 2010 Seal -->
-                    <svg id="usp-fallback-svg" class="hidden w-full h-full rounded-full" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <path id="topArc" d="M 24,100 A 76,76 0 1,1 176,100" />
-                            <path id="bottomArc" d="M 22,105 A 78,78 0 0,0 178,105" />
-                        </defs>
-                        <!-- Outer Gold Ring -->
-                        <circle cx="100" cy="100" r="98" fill="#f5b800" stroke="#0a2240" stroke-width="2"/>
-                        <!-- Inner Deep Navy Circle -->
-                        <circle cx="100" cy="100" r="68" fill="#0a2240" stroke="#f5b800" stroke-width="2"/>
-                        <!-- Inner Thin Gold Ring -->
-                        <circle cx="100" cy="100" r="46" fill="none" stroke="#f5b800" stroke-width="1.5"/>
-                        
-                        <!-- Outer Ring Curved Text -->
-                        <text fill="#0a2240" font-family="Inter, sans-serif" font-weight="800" font-size="13.2" letter-spacing="1.1">
-                            <textPath href="#topArc" startOffset="50%" text-anchor="middle">UNIVERSITY OF SOUTHERN PUNJAB</textPath>
-                        </text>
-                        <text fill="#0a2240" font-family="Inter, sans-serif" font-weight="800" font-size="14" letter-spacing="2">
-                            <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">PAKISTAN</textPath>
-                        </text>
-                        
-                        <!-- Multan & 2010 -->
-                        <text x="100" y="163" fill="#0a2240" font-family="Inter, sans-serif" font-weight="800" font-size="13" text-anchor="middle" letter-spacing="1">MULTAN</text>
-                        <text x="100" y="143" fill="#f5b800" font-family="Inter, sans-serif" font-weight="700" font-size="11.5" text-anchor="middle">2010</text>
-                        
-                        <!-- Center USP Letters -->
-                        <text x="100" y="83" fill="#f5b800" font-family="Georgia, serif" font-weight="800" font-size="25" text-anchor="middle" letter-spacing="1.5">USP</text>
-                        
-                        <!-- Open Book / Shield Emblem -->
-                        <path d="M 74,90 Q 100,96 126,90 L 126,120 Q 100,128 74,120 Z" fill="#f5b800"/>
-                        <path d="M 100,93 L 100,124" stroke="#0a2240" stroke-width="1.5"/>
-                        <!-- Geometric Calligraphy Motif -->
-                        <rect x="91" y="99" width="18" height="16" rx="2" fill="none" stroke="#0a2240" stroke-width="2" transform="rotate(45 100 107)"/>
-                        <circle cx="100" cy="107" r="4" fill="#0a2240"/>
-                    </svg>
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+                    <i class="fa-solid fa-puzzle-piece text-lg"></i>
                 </div>
-
                 <div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs sm:text-sm font-extrabold tracking-wider uppercase text-cyber-gold">USP Multan</span>
-                        <span class="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-cyber-cyan"></span>
-                        <span class="hidden sm:inline-block text-xs font-mono text-slate-400">DEPT. OF CYBER SECURITY</span>
-                    </div>
-                    <h1 class="text-sm sm:text-lg font-bold text-white leading-tight">University of Southern Punjab</h1>
+                    <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Cyber Puzzles</span>
+                    <span class="text-xs block text-slate-500 font-medium">C++ Beginner Hub 🚀</span>
                 </div>
             </div>
+            
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-1">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors active">
+                    <i class="fa-solid fa-house mr-2 text-blue-500"></i>Dashboard
+                </button>
+                <button onclick="switchTab('quizzes')" id="nav-quizzes" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors">
+                    <i class="fa-solid fa-brain mr-2 text-purple-500"></i>C++ Quizzes (25+)
+                </button>
+                <button onclick="switchTab('debugging')" id="nav-debugging" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors">
+                    <i class="fa-solid fa-bug mr-2 text-pink-500"></i>Debug Puzzles
+                </button>
+                <button onclick="switchTab('playground')" id="nav-playground" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors">
+                    <i class="fa-solid fa-code mr-2 text-emerald-500"></i>Mini Sandbox
+                </button>
+            </nav>
 
-            <!-- TOP-RIGHT: Prominent "Made by Subhan" Creator Pill -->
-            <div class="flex items-center gap-3">
-                <div class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gradient-to-r from-cyber-card to-slate-900 border border-cyber-gold/50 glow-gold flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-cyber-emerald animate-ping"></span>
-                    <span class="text-xs sm:text-sm font-bold tracking-wide text-white">
-                        Made by <span class="text-cyber-gold font-extrabold">Subhan</span>
-                    </span>
+            <!-- Streak & Score Badge -->
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center space-x-1.5 bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1.5 rounded-full text-xs font-semibold">
+                    <i class="fa-solid fa-fire text-amber-500 animate-pulse"></i>
+                    <span id="global-streak">Streak: 0</span>
                 </div>
+                <div class="flex items-center space-x-1.5 bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-full text-xs font-semibold">
+                    <i class="fa-solid fa-trophy text-blue-500"></i>
+                    <span id="global-score">Score: 0 pts</span>
+                </div>
+                <button onclick="mobileMenuToggle()" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
             </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-1">
+            <button onclick="switchTab('dashboard'); mobileMenuToggle()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Dashboard</button>
+            <button onclick="switchTab('quizzes'); mobileMenuToggle()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">C++ Quizzes (25+)</button>
+            <button onclick="switchTab('debugging'); mobileMenuToggle()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Debug Puzzles</button>
+            <button onclick="switchTab('playground'); mobileMenuToggle()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">Mini Sandbox</button>
         </div>
     </header>
 
-    <!-- ==================== MAIN PRESENTATION CONTENT ==================== -->
-    <main class="flex-grow">
+    <!-- Main Container Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
 
-        <!-- 1. VISUAL HERO SECTION WITH INTERACTIVE THREAT VS DEFENSE SHIELD -->
-        <section class="relative overflow-hidden border-b border-slate-800/80">
-            <!-- Animated Particle Network Canvas -->
-            <canvas id="networkCanvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-55"></canvas>
-
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                    
-                    <!-- Left Column: Ultra-Clean Headline + Visual Toggle -->
-                    <div class="lg:col-span-6 text-center lg:text-left space-y-6">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan text-xs font-mono uppercase tracking-widest">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                            Protect Your Data And Yourself!
-                        </div>
-
-                        <h2 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">
-                            CYBER <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-emerald">SECURITY</span>
-                        </h2>
-
-                        <!-- Minimal 1-Line Tagline -->
-                        <p class="text-base sm:text-xl text-slate-300 font-medium max-w-xl mx-auto lg:mx-0">
-                            Protecting Networks, Data & Digital Identity from Cyber Attacks.
-                        </p>
-
-                        <!-- Interactive Visual Mode Switcher: Defense Active vs Under Attack -->
-                        <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                            <button id="btn-defense-mode" onclick="setHeroState('defense')" class="px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2.5 bg-cyber-emerald text-slate-950 shadow-lg shadow-cyber-emerald/25 transition-all scale-105">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                FireWall ON (Safe)
-                            </button>
-                            <button id="btn-attack-mode" onclick="setHeroState('attack')" class="px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2.5 bg-cyber-card text-slate-300 border border-slate-700 hover:border-cyber-danger transition-all">
-                                <svg class="w-5 h-5 text-cyber-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                                FireWall Off (Unsafe)
-                            </button>
-                        </div>
-
-                        <!-- Visual Icon Badges (Zero Paragraphs) -->
-                        <div class="grid grid-cols-3 gap-3 pt-4 max-w-md mx-auto lg:mx-0">
-                            <div class="p-3 rounded-2xl bg-cyber-card/90 border border-slate-800 text-center">
-                                <div class="text-cyber-cyan font-mono font-bold text-lg sm:text-xl">256-BIT</div>
-                                <div class="text-[11px] uppercase tracking-wider text-slate-400">Encryption</div>
-                            </div>
-                            <div class="p-3 rounded-2xl bg-cyber-card/90 border border-slate-800 text-center">
-                                <div class="text-cyber-emerald font-mono font-bold text-lg sm:text-xl">24 / 7</div>
-                                <div class="text-[11px] uppercase tracking-wider text-slate-400">Monitoring</div>
-                            </div>
-                            <div class="p-3 rounded-2xl bg-cyber-card/90 border border-slate-800 text-center">
-                                <div class="text-cyber-gold font-mono font-bold text-lg sm:text-xl">ZERO</div>
-                                <div class="text-[11px] uppercase tracking-wider text-slate-400">Trust Model</div>
-                            </div>
-                        </div>
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="space-y-8">
+            <!-- Hero Welcome Card -->
+            <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-xl">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                    <i class="fa-solid fa-terminal"></i>
+                </div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium">
+                        <span>✨ Human-Crafted Learning</span>
+                        <span>•</span>
+                        <span>Beginner Friendly</span>
                     </div>
-
-                    <!-- Right Column: Large Interactive Cyber Shield SVG Graphic -->
-                    <div class="lg:col-span-6 flex justify-center">
-                        <div id="hero-graphic-box" class="relative w-full max-w-md aspect-square rounded-3xl bg-cyber-card/80 border border-cyber-cyan/30 glow-cyan p-6 flex flex-col items-center justify-center transition-all duration-500">
-                            
-                            <!-- Status Pill inside Graphic -->
-                            <div id="hero-status-pill" class="absolute top-5 px-4 py-1.5 rounded-full bg-cyber-emerald/20 border border-cyber-emerald text-cyber-emerald text-xs font-mono font-bold tracking-wider uppercase flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-cyber-emerald animate-ping"></span>
-                                SYSTEM PROTECTED
-                            </div>
-
-                            <!-- Detailed Animated Cyber Shield & Globe SVG -->
-                            <svg id="hero-shield-svg" class="w-64 h-64 sm:w-72 sm:h-72 animate-float" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <!-- Rotating Outer Radar Ring -->
-                                <circle cx="150" cy="150" r="130" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="12 8" opacity="0.45">
-                                    <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="20s" repeatCount="indefinite"/>
-                                </circle>
-                                <circle cx="150" cy="150" r="108" stroke="#10b981" stroke-width="2" stroke-dasharray="40 15" opacity="0.6">
-                                    <animateTransform attributeName="transform" type="rotate" from="360 150 150" to="0 150 150" dur="14s" repeatCount="indefinite"/>
-                                </circle>
-
-                                <!-- Central Shield Body -->
-                                <path id="shield-body" d="M150 42L232 76V146C232 202 197 246 150 264C103 246 68 202 68 146V76L150 42Z" fill="#0a2240" stroke="#00f0ff" stroke-width="4"/>
-                                <path d="M150 56L218 85V145C218 193 189 231 150 247C111 231 82 193 82 145V85L150 56Z" fill="#060b19" stroke="#10b981" stroke-width="2" opacity="0.8"/>
-
-                                <!-- Padlock Icon Inside Shield -->
-                                <rect x="122" y="138" width="56" height="46" rx="10" fill="#10b981" id="shield-lock-body"/>
-                                <path id="shield-lock-shackle" d="M133 138V121C133 111.6 140.6 104 150 104C159.4 104 167 111.6 167 121V138" stroke="#00f0ff" stroke-width="6" stroke-linecap="round"/>
-                                <circle cx="150" cy="158" r="5" fill="#060b19"/>
-                                <path d="M150 162V171" stroke="#060b19" stroke-width="4" stroke-linecap="round"/>
-
-                                <!-- Orbiting Satellite Nodes -->
-                                <circle cx="150" cy="20" r="6" fill="#00f0ff"/>
-                                <circle cx="280" cy="150" r="6" fill="#f5b800"/>
-                                <circle cx="150" cy="280" r="6" fill="#10b981"/>
-                                <circle cx="20" cy="150" r="6" fill="#00f0ff"/>
-                            </svg>
-
-                            <!-- Visual Bottom Caption -->
-                            <div id="hero-visual-caption" class="absolute bottom-5 text-center font-mono text-xs text-slate-300">
-                                FIREWALL: <span class="text-cyber-emerald font-bold">ACTIVE</span> &bull; INTRUSIONS: <span class="text-cyber-cyan font-bold">0</span>
-                            </div>
-                        </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">Master C++ Through Playful Puzzles</h1>
+                    <p class="text-blue-100 text-sm sm:text-base font-normal leading-relaxed">
+                        Say goodbye to boring textbooks! Solve over 25+ interactive quizzes, fix broken code snippets, and level up your coding logic with instant feedback and shuffled options.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('quizzes')" class="bg-white text-blue-700 hover:bg-blue-50 font-semibold px-6 py-3 rounded-xl shadow-lg transition-all duration-200 flex items-center space-x-2">
+                            <span>Start Quizzes Now</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                        <button onclick="switchTab('debugging')" class="bg-blue-700/50 hover:bg-blue-700/70 border border-blue-400/30 text-white font-semibold px-6 py-3 rounded-xl backdrop-blur-sm transition-all duration-200 flex items-center space-x-2">
+                            <span>Try Debug Challenges</span>
+                            <i class="fa-solid fa-bug text-xs"></i>
+                        </button>
                     </div>
-
                 </div>
             </div>
-        </section>
 
-        <!-- 2. INTERACTIVE VISUAL FLOW DIAGRAM (HOW CYBER DEFENSE WORKS) -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-            <div class="text-center mb-8">
-                <span class="text-xs font-mono uppercase tracking-widest text-cyber-cyan">Visual Architecture</span>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">How Security Blocks Works</h3>
-                <p class="text-xs sm:text-sm text-slate-400 mt-1">Tap any icon below to inspect its visual role</p>
-            </div>
-
-            <!-- Interactive SVG Pipeline Card -->
-            <div class="rounded-3xl bg-cyber-card border border-slate-800 p-6 sm:p-10 shadow-2xl">
-                <div class="grid grid-cols-1 md:grid-cols-7 items-center gap-4 text-center">
-                    
-                    <!-- Node 1: Threat Source -->
-                    <button onclick="selectFlowNode('threat')" id="node-threat" class="flow-node group p-4 rounded-2xl bg-[#091022] border-2 border-cyber-danger/60 hover:border-cyber-danger transition-all flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-2xl bg-cyber-danger/15 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <!-- Hacker / Malware SVG -->
-                            <svg class="w-9 h-9 text-cyber-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
-                        </div>
-                        <span class="font-bold text-white text-sm">1. Cyber Threat</span>
-                        <span class="text-[11px] font-mono text-cyber-danger mt-1">Malware / Phishing</span>
-                    </button>
-
-                    <!-- Animated Connector 1 -->
-                    <div class="hidden md:flex justify-center">
-                        <svg class="w-full h-8" viewBox="0 0 80 24">
-                            <line x1="0" y1="12" x2="72" y2="12" stroke="#ff2a5f" stroke-width="3" class="packet-line"/>
-                            <polygon points="70,6 80,12 70,18" fill="#ff2a5f"/>
-                        </svg>
-                    </div>
-
-                    <!-- Node 2: Firewall Filter -->
-                    <button onclick="selectFlowNode('firewall')" id="node-firewall" class="flow-node group p-4 rounded-2xl bg-[#091022] border-2 border-slate-700 hover:border-cyber-gold transition-all flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-2xl bg-cyber-gold/15 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <!-- Brick Firewall SVG -->
-                            <svg class="w-9 h-9 text-cyber-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
-                        </div>
-                        <span class="font-bold text-white text-sm">2. Firewall</span>
-                        <span class="text-[11px] font-mono text-cyber-gold mt-1">Blocks Bad Traffic</span>
-                    </button>
-
-                    <!-- Animated Connector 2 -->
-                    <div class="hidden md:flex justify-center">
-                        <svg class="w-full h-8" viewBox="0 0 80 24">
-                            <line x1="0" y1="12" x2="72" y2="12" stroke="#f5b800" stroke-width="3" class="packet-line"/>
-                            <polygon points="70,6 80,12 70,18" fill="#f5b800"/>
-                        </svg>
-                    </div>
-
-                    <!-- Node 3: Encryption Tunnel -->
-                    <button onclick="selectFlowNode('encryption')" id="node-encryption" class="flow-node group p-4 rounded-2xl bg-[#091022] border-2 border-slate-700 hover:border-cyber-cyan transition-all flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-2xl bg-cyber-cyan/15 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <!-- Key / Encryption SVG -->
-                            <svg class="w-9 h-9 text-cyber-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-                        </div>
-                        <span class="font-bold text-white text-sm">3. Encryption</span>
-                        <span class="text-[11px] font-mono text-cyber-cyan mt-1">Locks Data Code</span>
-                    </button>
-
-                    <!-- Animated Connector 3 -->
-                    <div class="hidden md:flex justify-center">
-                        <svg class="w-full h-8" viewBox="0 0 80 24">
-                            <line x1="0" y1="12" x2="72" y2="12" stroke="#10b981" stroke-width="3" class="packet-line"/>
-                            <polygon points="70,6 80,12 70,18" fill="#10b981"/>
-                        </svg>
-                    </div>
-
-                    <!-- Node 4: Secure Server -->
-                    <button onclick="selectFlowNode('server')" id="node-server" class="flow-node group p-4 rounded-2xl bg-[#091022] border-2 border-slate-700 hover:border-cyber-emerald transition-all flex flex-col items-center">
-                        <div class="w-16 h-16 rounded-2xl bg-cyber-emerald/15 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                            <!-- Secure Server SVG -->
-                            <svg class="w-9 h-9 text-cyber-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
-                        </div>
-                        <span class="font-bold text-white text-sm">4. Safe Data</span>
-                        <span class="text-[11px] font-mono text-cyber-emerald mt-1">100% Protected</span>
-                    </button>
-                </div>
-
-                <!-- Visual Node Spotlight Bar (Crisp 1-line visual badge) -->
-                <div id="flow-detail-banner" class="mt-8 p-4 rounded-2xl bg-[#060b19] border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <span id="flow-badge" class="px-3 py-1 rounded-lg bg-cyber-danger/20 text-cyber-danger font-mono text-xs font-bold uppercase">STEP 1</span>
-                        <span id="flow-title" class="text-sm sm:text-base font-bold text-white">Hackers send malicious packets or fake links.</span>
-                    </div>
-                    <span id="flow-metric" class="font-mono text-xs px-3 py-1.5 rounded-full bg-slate-900 text-cyber-cyan border border-slate-700">
-                        RISK LEVEL: HIGH
-                    </span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. FOUR CORE PILLARS (VISUAL GRAPHIC CARDS) -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
-            <div class="text-center mb-8">
-                <span class="text-xs font-mono uppercase tracking-widest text-cyber-gold">Core Domains</span>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">4 Pillars of Cyber Security</h3>
-                <p class="text-xs sm:text-sm text-slate-400 mt-1">Click any pillar card to view visual explanation &amp; real-world example</p>
-            </div>
-
+            <!-- Quick Stats & Modules Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- Card 1: Network Security -->
-                <button type="button" onclick="selectPillar('network')" id="pillar-card-network" class="pillar-card group rounded-3xl bg-cyber-card border-2 border-cyber-cyan p-6 flex flex-col items-center text-center transition-all hover:-translate-y-1 focus:outline-none">
-                    <div class="w-full h-36 rounded-2xl bg-[#060b19] mb-5 flex items-center justify-center relative overflow-hidden">
-                        <!-- Custom Network Visual Illustration -->
-                        <svg class="w-28 h-28" viewBox="0 0 120 120" fill="none">
-                            <circle cx="60" cy="60" r="42" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="4 4"/>
-                            <line x1="60" y1="20" x2="60" y2="100" stroke="#1e293b" stroke-width="2"/>
-                            <line x1="20" y1="60" x2="100" y2="60" stroke="#1e293b" stroke-width="2"/>
-                            <circle cx="60" cy="60" r="14" fill="#00f0ff" fill-opacity="0.2" stroke="#00f0ff" stroke-width="2.5"/>
-                            <circle cx="60" cy="20" r="7" fill="#10b981"/>
-                            <circle cx="100" cy="60" r="7" fill="#00f0ff"/>
-                            <circle cx="60" cy="100" r="7" fill="#f5b800"/>
-                            <circle cx="20" cy="60" r="7" fill="#10b981"/>
-                        </svg>
+                <div class="human-card bg-white p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-question"></i>
                     </div>
-                    <h4 class="text-lg font-extrabold text-white">Network Security</h4>
-                    <p class="text-xs text-slate-400 mt-1">Firewalls &bull; VPN &bull; Wi-Fi Shield</p>
-                    <span class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyber-cyan/10 text-cyber-cyan font-mono text-[11px] font-bold group-hover:bg-cyber-cyan group-hover:text-slate-950 transition-colors">
-                        Click to Explore
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                    </span>
-                </button>
-
-                <!-- Card 2: Cryptography -->
-                <button type="button" onclick="selectPillar('crypto')" id="pillar-card-crypto" class="pillar-card group rounded-3xl bg-cyber-card border-2 border-slate-800 hover:border-cyber-emerald p-6 flex flex-col items-center text-center transition-all hover:-translate-y-1 focus:outline-none">
-                    <div class="w-full h-36 rounded-2xl bg-[#060b19] mb-5 flex items-center justify-center relative overflow-hidden">
-                        <!-- Custom Encryption Visual Illustration -->
-                        <svg class="w-28 h-28" viewBox="0 0 120 120" fill="none">
-                            <rect x="25" y="48" width="70" height="50" rx="10" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2.5"/>
-                            <path d="M42 48V34C42 24 50 16 60 16C70 16 78 24 78 34V48" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
-                            <text x="60" y="78" fill="#10b981" font-family="monospace" font-weight="bold" font-size="14" text-anchor="middle">010110</text>
-                        </svg>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-800" id="stat-quiz-count">25+</div>
+                        <div class="text-sm text-slate-500 font-medium">Shuffled Questions</div>
                     </div>
-                    <h4 class="text-lg font-extrabold text-white">Cryptography</h4>
-                    <p class="text-xs text-slate-400 mt-1">AES-256 &bull; Secret Keys &bull; SSL</p>
-                    <span class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyber-emerald/10 text-cyber-emerald font-mono text-[11px] font-bold group-hover:bg-cyber-emerald group-hover:text-slate-950 transition-colors">
-                        Click to Explore
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                    </span>
-                </button>
+                </div>
 
-                <!-- Card 3: Ethical Hacking -->
-                <button type="button" onclick="selectPillar('hacking')" id="pillar-card-hacking" class="pillar-card group rounded-3xl bg-cyber-card border-2 border-slate-800 hover:border-cyber-gold p-6 flex flex-col items-center text-center transition-all hover:-translate-y-1 focus:outline-none">
-                    <div class="w-full h-36 rounded-2xl bg-[#060b19] mb-5 flex items-center justify-center relative overflow-hidden">
-                        <!-- Custom Terminal / Pen-Testing Visual Illustration -->
-                        <svg class="w-28 h-28" viewBox="0 0 120 120" fill="none">
-                            <rect x="16" y="24" width="88" height="72" rx="10" fill="#f5b800" fill-opacity="0.1" stroke="#f5b800" stroke-width="2.5"/>
-                            <circle cx="28" cy="36" r="3" fill="#ff2a5f"/>
-                            <circle cx="38" cy="36" r="3" fill="#f5b800"/>
-                            <circle cx="48" cy="36" r="3" fill="#10b981"/>
-                            <path d="M32 58L44 68L32 78" stroke="#f5b800" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                            <line x1="52" y1="78" x2="76" y2="78" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
-                        </svg>
+                <div class="human-card bg-white p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-pink-50 text-pink-600 flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-bug-slash"></i>
                     </div>
-                    <h4 class="text-lg font-extrabold text-white">Ethical Hacking</h4>
-                    <p class="text-xs text-slate-400 mt-1">Bug Bounty &bull; Pen-Testing</p>
-                    <span class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyber-gold/10 text-cyber-gold font-mono text-[11px] font-bold group-hover:bg-cyber-gold group-hover:text-slate-950 transition-colors">
-                        Click to Explore
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                    </span>
-                </button>
-
-                <!-- Card 4: Threat Radar -->
-                <button type="button" onclick="selectPillar('radar')" id="pillar-card-radar" class="pillar-card group rounded-3xl bg-cyber-card border-2 border-slate-800 hover:border-cyber-danger p-6 flex flex-col items-center text-center transition-all hover:-translate-y-1 focus:outline-none">
-                    <div class="w-full h-36 rounded-2xl bg-[#060b19] mb-5 flex items-center justify-center relative overflow-hidden">
-                        <!-- Custom Radar / Threat Detection Visual Illustration -->
-                        <svg class="w-28 h-28" viewBox="0 0 120 120" fill="none">
-                            <circle cx="60" cy="60" r="42" stroke="#ff2a5f" stroke-width="2" opacity="0.5"/>
-                            <circle cx="60" cy="60" r="26" stroke="#ff2a5f" stroke-width="1.5" opacity="0.7"/>
-                            <circle cx="60" cy="60" r="8" fill="#ff2a5f"/>
-                            <line x1="60" y1="60" x2="90" y2="30" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
-                            <circle cx="82" cy="42" r="4" fill="#00f0ff"/>
-                        </svg>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-800" id="stat-debug-count">10</div>
+                        <div class="text-sm text-slate-500 font-medium">Debug Challenges</div>
                     </div>
-                    <h4 class="text-lg font-extrabold text-white">Threat Radar</h4>
-                    <p class="text-xs text-slate-400 mt-1">AI Detection &bull; Rapid Response</p>
-                    <span class="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyber-danger/10 text-cyber-danger font-mono text-[11px] font-bold group-hover:bg-cyber-danger group-hover:text-white transition-colors">
-                        Click to Explore
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
-                    </span>
-                </button>
+                </div>
 
+                <div class="human-card bg-white p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-800" id="stat-xp">0 XP</div>
+                        <div class="text-sm text-slate-500 font-medium">Total Earned</div>
+                    </div>
+                </div>
+
+                <div class="human-card bg-white p-6 rounded-2xl flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl font-bold">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-800" id="stat-accuracy">0%</div>
+                        <div class="text-sm text-slate-500 font-medium">Accuracy Rate</div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Interactive Pillar Visual Presentation Drawer -->
-            <div id="pillar-detail-panel" class="mt-8 rounded-3xl bg-cyber-card border-2 border-cyber-cyan/50 p-6 sm:p-8 shadow-2xl transition-all duration-300">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                    
-                    <!-- Left: Large Visual Diagram Box -->
-                    <div class="lg:col-span-5 rounded-2xl bg-[#060b19] border border-slate-800 p-6 flex flex-col items-center justify-center text-center">
-                        <div id="pillar-visual-graphic" class="w-full flex items-center justify-center">
-                            <!-- Populated dynamically via JS -->
-                        </div>
-                        <span id="pillar-visual-caption" class="mt-3 font-mono text-xs text-cyber-cyan uppercase tracking-wider">
-                            FIREWALL + VPN TUNNEL PROTECTION
-                        </span>
+            <!-- Learning Path Cards -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center space-x-2">
+                        <i class="fa-solid fa-map text-blue-500"></i>
+                        <span>Beginner Learning Roadmap</span>
+                    </h2>
+                    <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-medium">Step-by-Step C++</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="human-card bg-white p-6 rounded-2xl space-y-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">1</div>
+                        <h3 class="font-bold text-lg text-slate-800">Basics & I/O</h3>
+                        <p class="text-slate-600 text-sm">Learn about `cout`, `cin`, variables, data types (`int`, `float`, `char`, `string`), and basic arithmetic operators.</p>
+                        <button onclick="switchTab('quizzes')" class="text-blue-600 font-semibold text-sm hover:underline flex items-center space-x-1">
+                            <span>Practice Quiz 1-8</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
                     </div>
 
-                    <!-- Right: Easy-to-Present Bullet Points & Real-World Example -->
-                    <div class="lg:col-span-7 space-y-4">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <span id="pillar-tag" class="px-3 py-1 rounded-full bg-cyber-cyan/15 text-cyber-cyan font-mono text-xs font-bold uppercase">
-                                PILLAR 01 &bull; NETWORK SECURITY
-                            </span>
-                            <span class="text-xs font-mono text-slate-400">USP PRESENTATION VIEW</span>
-                        </div>
-
-                        <h4 id="pillar-heading" class="text-2xl sm:text-3xl font-extrabold text-white">
-                            Network Security
-                        </h4>
-
-                        <!-- 3 Concise Visual Bullet Points -->
-                        <ul id="pillar-points" class="space-y-2.5 text-sm sm:text-base text-slate-200">
-                            <!-- Populated dynamically -->
-                        </ul>
-
-                        <!-- Real-World Example Highlight Box -->
-                        <div class="p-4 rounded-2xl bg-[#060b19] border border-slate-800 flex items-start gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-cyber-gold/15 text-cyber-gold flex items-center justify-center flex-shrink-0 mt-0.5">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                            </div>
-                            <div>
-                                <div class="text-xs font-mono font-bold text-cyber-gold uppercase">Real-World Example</div>
-                                <p id="pillar-example" class="text-xs sm:text-sm text-slate-300 mt-0.5">
-                                    Using a VPN &amp; Firewall on University Wi-Fi so strangers cannot spy on student logins.
-                                </p>
-                            </div>
-                        </div>
+                    <div class="human-card bg-white p-6 rounded-2xl space-y-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">2</div>
+                        <h3 class="font-bold text-lg text-slate-800">Control Flow & Loops</h3>
+                        <p class="text-slate-600 text-sm">Master conditional statements (`if`, `else`, `switch`) and iteration loops (`for`, `while`, `do-while`).</p>
+                        <button onclick="switchTab('quizzes')" class="text-purple-600 font-semibold text-sm hover:underline flex items-center space-x-1">
+                            <span>Practice Quiz 9-16</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
                     </div>
 
+                    <div class="human-card bg-white p-6 rounded-2xl space-y-4">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center font-bold">3</div>
+                        <h3 class="font-bold text-lg text-slate-800">Arrays, Funcs & Pointers</h3>
+                        <p class="text-slate-600 text-sm">Understand functions, parameter passing, 1D/2D arrays, vectors, and memory basics with pointers.</p>
+                        <button onclick="switchTab('quizzes')" class="text-pink-600 font-semibold text-sm hover:underline flex items-center space-x-1">
+                            <span>Practice Quiz 17-25+</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. LIVE INTERACTIVE DEMO LAB (FOR SHOWING & EXPLAINING LIVE) -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-            <div class="text-center mb-8">
-                <span class="text-xs font-mono uppercase tracking-widest text-cyber-emerald">Live Interactive Demo</span>
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">How Encryption Works</h3>
+
+        <!-- TAB 2: C++ QUIZZES (25+ SHUFFLED QUESTIONS) -->
+        <section id="tab-quizzes" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl human-card space-y-6">
+                <!-- Quiz Header & Progress -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-bold">Interactive Quiz Engine</span>
+                            <span class="text-slate-400 text-xs">Shuffled Options Enabled 🔀</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-1">C++ Beginner Mastery Quiz</h2>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span id="quiz-progress-text" class="text-sm font-semibold text-slate-600">Question 1 of 25</span>
+                        <button onclick="loadQuizSession()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center space-x-1.5">
+                            <i class="fa-solid fa-shuffle"></i>
+                            <span>Reshuffle & Restart</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                    <div id="quiz-progress-bar" class="bg-purple-600 h-full transition-all duration-300" style="width: 4%;"></div>
+                </div>
+
+                <!-- Question Box -->
+                <div id="quiz-container" class="space-y-6 pt-2">
+                    <!-- Dynamic Question Inserted Here -->
+                </div>
+
+                <!-- Quiz Navigation Buttons -->
+                <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <button id="quiz-prev-btn" onclick="prevQuizQuestion()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Previous
+                    </button>
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm shadow-md transition-all flex items-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
+                        <span>Next Question</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
             </div>
+        </section>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- Demo A: Live Encryption Visualizer -->
-                <div class="rounded-3xl bg-cyber-card border border-slate-800 p-6 sm:p-8 flex flex-col justify-between">
+
+        <!-- TAB 3: DEBUGGING PUZZLES -->
+        <section id="tab-debugging" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl human-card space-y-6">
+                <!-- Debug Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
                     <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-full bg-cyber-cyan/15 text-cyber-cyan font-mono text-xs font-bold">DEMO 01 &bull; ENCRYPTION</span>
-                            <svg class="w-6 h-6 text-cyber-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-xs font-bold">Bug Hunter Mode</span>
+                            <span class="text-slate-400 text-xs">Find and Fix C++ Bugs 🐛</span>
                         </div>
-                        <h4 class="text-xl font-bold text-white mb-4">Plain Text &rarr; Secret Cipher</h4>
-                        
-                        <label class="block text-xs font-mono text-slate-400 uppercase mb-2">Type Any Message:</label>
-                        <input id="plainInput" type="text" value="USP Cyber Security" oninput="updateEncryption()" class="w-full px-4 py-3 rounded-xl bg-[#060b19] border border-slate-700 text-white font-mono focus:outline-none focus:border-cyber-cyan" placeholder="Type text here...">
+                        <h2 class="text-2xl font-bold text-slate-800 mt-1">Interactive Code Debugger</h2>
                     </div>
-
-                    <div class="mt-6 p-4 rounded-2xl bg-[#060b19] border border-cyber-cyan/40">
-                        <div class="flex items-center justify-between text-xs font-mono text-cyber-cyan mb-1">
-                            <span>ENCRYPTED OUTPUT (UNREADABLE BY HACKERS)</span>
-                            <span>AES-HEX</span>
-                        </div>
-                        <div id="cipherOutput" class="font-mono text-sm sm:text-base text-cyber-emerald break-all font-bold tracking-wider">
-                            55 53 50 20 43 79 62 65 72 20 53 65 63 75 72 69 74 79
-                        </div>
+                    <div class="flex items-center space-x-3">
+                        <span id="debug-progress-text" class="text-sm font-semibold text-slate-600">Challenge 1 of 10</span>
+                        <button onclick="loadDebugSession()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors flex items-center space-x-1.5">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Reset Puzzles</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Demo B: Visual Password Strength Meter -->
-                <div class="rounded-3xl bg-cyber-card border border-slate-800 p-6 sm:p-8 flex flex-col justify-between">
+                <!-- Debug Challenge Container -->
+                <div id="debug-container" class="space-y-6">
+                    <!-- Dynamic Debug Content Inserted Here -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 4: MINI SANDBOX -->
+        <section id="tab-playground" class="hidden space-y-6">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl human-card space-y-6">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 rounded-full bg-cyber-gold/15 text-cyber-gold font-mono text-xs font-bold">DEMO 02 &bull; PASSWORD TEST</span>
-                            <svg class="w-6 h-6 text-cyber-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold">C++ Snippet Sandbox</span>
+                        <h2 class="text-2xl font-bold text-slate-800 mt-1">Test & Simulate Code Logic</h2>
+                    </div>
+                    <button onclick="runSandboxCode()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl shadow-md transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-play"></i>
+                        <span>Run Simulation</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Code Editor Box -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">C++ Source Code</label>
+                        <div class="bg-slate-900 rounded-2xl p-4 text-slate-200 code-font text-sm shadow-inner overflow-hidden">
+                            <textarea id="sandbox-code" rows="12" class="w-full bg-transparent outline-none resize-none text-emerald-400">#include <iostream>
+using namespace std;
+
+int main() {
+    int score = 95;
+    cout << "Welcome to Cyber Puzzles!" << endl;
+    cout << "Your C++ Score Target: " << score << endl;
+    
+    if(score >= 90) {
+        cout << "Status: Expert Beginner! 🌟" << endl;
+    }
+    return 0;
+}</textarea>
                         </div>
-                        <h4 class="text-xl font-bold text-white mb-4">Hacker Crack-Time Visualizer</h4>
-                        
-                        <label class="block text-xs font-mono text-slate-400 uppercase mb-2">Test a Sample Password:</label>
-                        <input id="passInput" type="text" value="USP@Multan2026!" oninput="checkPasswordVisual()" class="w-full px-4 py-3 rounded-xl bg-[#060b19] border border-slate-700 text-white font-mono focus:outline-none focus:border-cyber-gold" placeholder="Enter sample password...">
                     </div>
 
-                    <div class="mt-6 p-4 rounded-2xl bg-[#060b19] border border-slate-800">
-                        <div class="flex items-center justify-between mb-2">
-                            <span id="passStrengthLabel" class="text-xs font-mono font-bold text-cyber-emerald uppercase">STRONG SHIELD</span>
-                            <span id="passCrackTime" class="text-xs font-mono text-slate-300">Crack Time: 400+ Years</span>
-                        </div>
-                        <!-- Visual Progress Bar -->
-                        <div class="w-full h-3 rounded-full bg-slate-800 overflow-hidden">
-                            <div id="passStrengthBar" class="h-full bg-cyber-emerald transition-all duration-300" style="width: 95%"></div>
+                    <!-- Output Console Box -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Console Output Simulation</label>
+                        <div class="bg-slate-900 rounded-2xl p-4 text-slate-300 code-font text-sm h-[290px] overflow-y-auto shadow-inner border border-slate-800" id="sandbox-output">
+                            <span class="text-slate-500">// Click "Run Simulation" to execute C++ code logic...</span>
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
 
     </main>
 
-    <!-- ==================== FOOTER WITH "MADE BY SUBHAN" & USP MULTAN ==================== -->
-    <footer class="border-t border-slate-800/80 bg-[#040812]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-400">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyber-gold"></span>
-                <span>Department of Cyber Security &bull; <strong class="text-white">University of Southern Punjab (USP), Multan</strong></span>
+    <!-- Custom Modal Message Box (No Alert) -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full mx-4 shadow-2xl space-y-4 border border-slate-100 text-center animate-in">
+            <div id="modal-icon" class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold bg-blue-50 text-blue-600">
+                <i class="fa-solid fa-circle-check"></i>
             </div>
-            
-            <div class="px-4 py-1.5 rounded-full bg-cyber-card border border-cyber-gold/40 text-xs sm:text-sm font-bold text-white">
-                Designed &amp; Made by <span class="text-cyber-gold">Subhan</span>
+            <h3 id="modal-title" class="text-xl font-bold text-slate-800">Great Job!</h3>
+            <p id="modal-message" class="text-slate-600 text-sm">Your answer was correct! Keep up the amazing momentum.</p>
+            <button onclick="closeModal()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition-all">
+                Continue Learning
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-200 bg-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="font-bold text-slate-800">Cyber Puzzles</span>
+                <span>• Human-designed C++ Interactive Learning Hub</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span>✨ 25+ Shuffled Questions</span>
+                <span>•</span>
+                <span>🐛 Bug Puzzles</span>
+                <span>•</span>
+                <span class="font-semibold text-slate-700">By Subhan</span>
             </div>
         </div>
     </footer>
 
-    <!-- ==================== INTERACTIVE JAVASCRIPT ==================== -->
+    <!-- Custom Modal Message Box (No Alert) -->
     <script>
-        // 1. Hero Shield Toggle (Defense Active vs Simulate Attack)
-        function setHeroState(mode) {
-            const box = document.getElementById('hero-graphic-box');
-            const pill = document.getElementById('hero-status-pill');
-            const shieldBody = document.getElementById('shield-body');
-            const lockBody = document.getElementById('shield-lock-body');
-            const caption = document.getElementById('hero-visual-caption');
-            const btnDef = document.getElementById('btn-defense-mode');
-            const btnAtk = document.getElementById('btn-attack-mode');
+        // Global App State
+        let currentTab = 'dashboard';
+        let userScore = 0;
+        let userStreak = 0;
+        let totalXp = 0;
+        let correctAnswersCount = 0;
+        let totalAttempted = 0;
 
-            if (mode === 'defense') {
-                box.className = 'relative w-full max-w-md aspect-square rounded-3xl bg-cyber-card/80 border border-cyber-cyan/30 glow-cyan p-6 flex flex-col items-center justify-center transition-all duration-500';
-                pill.className = 'absolute top-5 px-4 py-1.5 rounded-full bg-cyber-emerald/20 border border-cyber-emerald text-cyber-emerald text-xs font-mono font-bold tracking-wider uppercase flex items-center gap-2';
-                pill.innerHTML = '<span class="w-2 h-2 rounded-full bg-cyber-emerald animate-ping"></span> SYSTEM PROTECTED';
-                shieldBody.setAttribute('stroke', '#00f0ff');
-                lockBody.setAttribute('fill', '#10b981');
-                caption.innerHTML = 'FIREWALL: <span class="text-cyber-emerald font-bold">ACTIVE</span> &bull; INTRUSIONS: <span class="text-cyber-cyan font-bold">0</span>';
+        // Quiz State
+        let currentQuizIndex = 0;
+        let shuffledQuizzes = [];
+
+        // Debug State
+        let currentDebugIndex = 0;
+        let shuffledDebugs = [];
+
+        // 25+ Comprehensive Beginner C++ Questions Bank
+        const rawQuizBank = [
+            {
+                q: "Which of the following is the correct syntax to output text in C++?",
+                options: [
+                    "cout << \"Hello World\";",
+                    "print(\"Hello World\");",
+                    "Console.WriteLine(\"Hello World\");",
+                    "echo \"Hello World\";"
+                ],
+                correct: 0,
+                explanation: "`cout` along with insertion operator `<<` is standard in C++ for outputting data to the console."
+            },
+            {
+                q: "Which header file is essential for using `cin` and `cout` in C++?",
+                options: [
+                    "#include <iostream>",
+                    "#include <stdio.h>",
+                    "#include <conio.h>",
+                    "#include <string>"
+                ],
+                correct: 0,
+                explanation: "`<iostream>` stands for input-output stream and is required for standard console streams."
+            },
+            {
+                q: "What is the correct file extension for C++ source code files?",
+                options: [".cpp", ".cc", ".cxx", "All of the above"],
+                correct: 3,
+                explanation: "While `.cpp` is most common, `.cc`, `.cxx`, and `.C` are also valid C++ source file extensions."
+            },
+            {
+                q: "Which keyword is used to define a constant variable in C++ so it cannot be modified?",
+                options: ["const", "constant", "static", "fixed"],
+                correct: 0,
+                explanation: "The `const` qualifier tells the compiler that the variable value is read-only after initialization."
+            },
+            {
+                q: "What is the default value of an uninitialized local integer variable in C++?",
+                options: [
+                    "Garbage value (indeterminate)",
+                    "0",
+                    "1",
+                    "Null"
+                ],
+                correct: 0,
+                explanation: "Uninitialized local variables in C++ contain indeterminate (garbage) values. Always initialize your variables!"
+            },
+            {
+                q: "Which operator is used to access members of a structure or class using a pointer?",
+                options: ["->", ".", "::", "*"],
+                correct: 0,
+                explanation: "The arrow operator `->` is shorthand for dereferencing a pointer and accessing its member (`(*ptr).member`)."
+            },
+            {
+                q: "How do you write a single-line comment in C++?",
+                options: ["// This is a comment", "/* This is a comment */", "# This is a comment", "<!-- This is a comment -->"],
+                correct: 0,
+                explanation: "`//` starts a single-line comment in C++, while `/* ... */` is used for multi-line comments."
+            },
+            {
+                q: "Which data type is most appropriate to store a single character like 'A'?",
+                options: ["char", "string", "int", "float"],
+                correct: 0,
+                explanation: "`char` stores single characters using ASCII values and takes 1 byte of memory."
+            },
+            {
+                q: "What is the correct way to write an `if` statement in C++ checking if `x` equals 10?",
+                options: ["if (x == 10)", "if x = 10", "if (x equals 10)", "if [x == 10]"],
+                correct: 0,
+                explanation: "`==` is the equality comparison operator. `=` is used for assignment."
+            },
+            {
+                q: "Which loop is guaranteed to execute at least once regardless of the condition?",
+                options: ["do-while loop", "for loop", "while loop", "foreach loop"],
+                correct: 0,
+                explanation: "A `do-while` loop evaluates its condition after executing the loop body at least once."
+            },
+            {
+                q: "What does the `break` statement do inside a loop?",
+                options: [
+                    "Terminates the loop immediately",
+                    "Skips the current iteration",
+                    "Pauses the program for 1 second",
+                    "Restarts the loop from the beginning"
+                ],
+                correct: 0,
+                explanation: "`break` exits the nearest enclosing loop or switch statement immediately."
+            },
+            {
+                q: "What does the `continue` statement do inside a loop?",
+                options: [
+                    "Skips the rest of the current iteration and goes to the next iteration",
+                    "Stops the program execution",
+                    "Terminates the loop",
+                    "Resets the loop counter to 0"
+                ],
+                correct: 0,
+                explanation: "`continue` skips remaining statements in the current loop iteration and proceeds to the next check."
+            },
+            {
+                q: "How do you declare a 1D integer array of size 5 in C++?",
+                options: ["int arr[5];", "array int arr(5);", "int arr = {5};", "arr int[5];"],
+                correct: 0,
+                explanation: "`int arr[5];` declares an array named `arr` capable of holding 5 integers."
+            },
+            {
+                q: "What is the index of the first element in a C++ array?",
+                options: ["0", "1", "-1", "Depends on declaration"],
+                correct: 0,
+                explanation: "C++ uses zero-based indexing, meaning the first element is at index `0`."
+            },
+            {
+                q: "Which function is the mandatory entry point of any C++ console application?",
+                options: ["main()", "start()", "init()", "run()"],
+                correct: 0,
+                explanation: "Execution of every C++ program begins with the `main()` function."
+            },
+            {
+                q: "Which operator is used to find the memory address of a variable?",
+                options: ["& (address-of)", "* (dereference)", "#", "%"],
+                correct: 0,
+                explanation: "The `&` operator returns the memory address where a variable is stored."
+            },
+            {
+                q: "What is a pointer in C++?",
+                options: [
+                    "A variable that stores the memory address of another variable",
+                    "A special type of function",
+                    "A constant value",
+                    "An array of strings"
+                ],
+                correct: 0,
+                explanation: "Pointers hold memory addresses rather than direct values."
+            },
+            {
+                q: "What is the correct syntax for a standard `for` loop header in C++?",
+                options: [
+                    "for (int i = 0; i < 10; i++)",
+                    "for i = 0 to 10",
+                    "for (int i = 10; i > 0)",
+                    "loop (int i = 0; i < 10)"
+                ],
+                correct: 0,
+                explanation: "A standard `for` loop takes initialization, condition, and increment expressions separated by semicolons."
+            },
+            {
+                q: "Which header is required to use dynamic size arrays (`std::vector`) in C++?",
+                options: ["<vector>", "<array>", "<dynamic>", "<list>"],
+                correct: 0,
+                explanation: "`#include <vector>` provides the standard dynamic array container."
+            },
+            {
+                q: "How do you add an element to the end of a `std::vector<int> v`?",
+                options: ["v.push_back(val);", "v.add(val);", "v.append(val);", "v.insert(val);"],
+                correct: 0,
+                explanation: "`push_back()` is the standard member function to append elements to a vector."
+            },
+            {
+                q: "What is function overloading in C++?",
+                options: [
+                    "Having multiple functions with the same name but different parameters",
+                    "Writing a function that is too long",
+                    "Calling a function recursively",
+                    "Passing too many arguments to a function"
+                ],
+                correct: 0,
+                explanation: "Function overloading allows multiple functions to share the same name provided their parameter signatures differ."
+            },
+            {
+                q: "What does OOP stand for in software development?",
+                options: [
+                    "Object-Oriented Programming",
+                    "Order of Operations",
+                    "Online Operation Protocol",
+                    "Optimized Output Procedure"
+                ],
+                correct: 0,
+                explanation: "OOP stands for Object-Oriented Programming, centered around classes and objects."
+            },
+            {
+                q: "Which access specifier makes class members accessible only within that class?",
+                options: ["private", "public", "protected", "hidden"],
+                correct: 0,
+                explanation: "`private` members cannot be accessed directly from outside the class."
+            },
+            {
+                q: "What keyword is used to inherit a class in C++?",
+                options: [": (colon)", "inherits", "extends", "derives"],
+                correct: 0,
+                explanation: "Inheritance in C++ is specified using a colon (`class Derived : public Base`)."
+            },
+            {
+                q: "What is the purpose of the `return 0;` statement at the end of `main()`?",
+                options: [
+                    "Signals successful execution of the program to the operating system",
+                    "Deletes all variables",
+                    "Pauses the console",
+                    "Resets the score"
+                ],
+                correct: 0,
+                explanation: "Returning `0` from `main()` indicates to the OS that the program completed without errors."
+            }
+        ];
+
+        // Debugging Puzzles Bank
+        const rawDebugBank = [
+            {
+                title: "Missing Semicolon Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello C++" \n    return 0;\n}`,
+                bug: "Missing semicolon `;` at the end of the `cout` statement.",
+                options: [
+                    "Add a semicolon `;` after the `cout` line",
+                    "Change `cout` to `print`",
+                    "Remove `return 0;`",
+                    "Add `#include <string>`"
+                ],
+                correct: 0,
+                explanation: "Every statement in C++ must end with a semicolon `;`."
+            },
+            {
+                title: "Undeclared Variable Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    total = 50 + 20;\n    cout << total;\n    return 0;\n}`,
+                bug: "Variable `total` is used without being declared with a data type like `int`.",
+                options: [
+                    "Declare `int total;` before using it",
+                    "Change `total` to `cout`",
+                    "Add `using namespace std;`",
+                    "Remove the `+` sign"
+                ],
+                correct: 0,
+                explanation: "In C++, all variables must be declared with their data type before assignment."
+            },
+            {
+                title: "Incorrect Equality Operator Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int x = 10;\n    if (x = 5) {\n        cout << "Equal!";\n    }\n    return 0;\n}`,
+                bug: "Using `=` (assignment) instead of `==` (comparison) inside the `if` condition.",
+                options: [
+                    "Change `x = 5` to `x == 5`",
+                    "Change `if` to `while`",
+                    "Declare `x` as float",
+                    "Remove `using namespace std;`"
+                ],
+                correct: 0,
+                explanation: "`=` assigns value, while `==` compares two values for equality."
+            },
+            {
+                title: "Array Out of Bounds Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int nums[3] = {10, 20, 30};\n    cout << nums[3];\n    return 0;\n}`,
+                bug: "Accessing index `3` on an array of size 3 (valid indices are 0, 1, 2).",
+                options: [
+                    "Change `nums[3]` to `nums[2]` (or increase array size)",
+                    "Change array to float",
+                    "Add another number to the array",
+                    "Remove `cout`"
+                ],
+                correct: 0,
+                explanation: "Array indexing starts at 0, so a size 3 array has indices 0, 1, and 2. Index 3 causes undefined behavior."
+            },
+            {
+                title: "Missing Header Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    string name = "Cyber Puzzles";\n    cout << name;\n    return 0;\n}`,
+                bug: "Using `string` data type without including `<string>` header.",
+                options: [
+                    "Add `#include <string>` at the top",
+                    "Change `string` to `int`",
+                    "Remove `using namespace std;`",
+                    "Add a semicolon"
+                ],
+                correct: 0,
+                explanation: "While some compilers include `<string>` transitively via `<iostream>`, it is best practice to explicitly `#include <string>`."
+            },
+            {
+                title: "Infinite Loop Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int i = 0;\n    while (i < 5) {\n        cout << i << endl;\n    }\n    return 0;\n}`,
+                bug: "The loop variable `i` is never incremented, creating an infinite loop.",
+                options: [
+                    "Add `i++;` inside the while loop body",
+                    "Change `while` to `if`",
+                    "Change `i < 5` to `i > 5`",
+                    "Remove `endl`"
+                ],
+                correct: 0,
+                explanation: "Without `i++`, `i` remains 0 forever, keeping the condition `i < 5` true infinitely."
+            },
+            {
+                title: "Missing Return Value Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "No return statement";\n    // Missing return 0;\n}`,
+                bug: "Function `int main()` promises to return an integer but lacks a `return` statement.",
+                options: [
+                    "Add `return 0;` at the end of `main()`",
+                    "Change `int main()` to `void main()`",
+                    "Remove `cout`",
+                    "Add another `iostream`"
+                ],
+                correct: 0,
+                explanation: "Functions returning `int` (including `main`) should return an integer value upon completion."
+            },
+            {
+                title: "Pointer Uninitialized Dereference Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int *ptr;\n    *ptr = 100;\n    cout << *ptr;\n    return 0;\n}`,
+                bug: "Dereferencing an uninitialized pointer `ptr` which points to random memory.",
+                options: [
+                    "Initialize pointer to point to a variable: `int val; int *ptr = &val;`",
+                    "Change `*ptr` to `ptr`",
+                    "Make `ptr` a constant",
+                    "Remove `cout`"
+                ],
+                correct: 0,
+                explanation: "Pointers must be pointed to valid memory locations before dereferencing with `*`."
+            },
+            {
+                title: "Incorrect Function Declaration Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nvoid addNumbers(int a, int b) {\n    return a + b;\n}\n\nint main() {\n    cout << addNumbers(5, 10);\n    return 0;\n}`,
+                bug: "Function has return type `void` but attempts to `return` a value.",
+                options: [
+                    "Change `void` to `int` return type",
+                    "Remove the `return` keyword",
+                    "Change `int main()` to `void`",
+                    "Pass 3 arguments instead of 2"
+                ],
+                correct: 0,
+                explanation: "Functions returning a sum must declare their return type as `int`, not `void`."
+            },
+            {
+                title: "Misspelled Keyword Bug",
+                snippet: `#include <iostream>\nusing namespace std;\n\nint main() {\n    INTEGENT x = 42;\n    cout << x;\n    return 0;\n}`,
+                bug: "Misspelled data type keyword (`INTEGENT` instead of `int`).",
+                options: [
+                    "Change `INTEGENT` to `int`",
+                    "Change `cout` to `print`",
+                    "Remove `x = 42`",
+                    "Add quotation marks around 42"
+                ],
+                correct: 0,
+                explanation: "C++ is case-sensitive and relies on exact keywords like `int`, `float`, and `double`."
+            }
+        ];
+
+        // Shuffle utility with Fisher-Yates and Shuffled Options
+        function prepareShuffledQuizzes() {
+            shuffledQuizzes = rawQuizBank.map(item => {
+                // Clone options and keep track of correct answer text
+                let optionsWithMeta = item.options.map((opt, idx) => ({
+                    text: opt,
+                    isOriginalCorrect: idx === item.correct
+                }));
                 
-                btnDef.className = 'px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2.5 bg-cyber-emerald text-slate-950 shadow-lg shadow-cyber-emerald/25 transition-all scale-105';
-                btnAtk.className = 'px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2.5 bg-cyber-card text-slate-300 border border-slate-700 hover:border-cyber-danger transition-all';
-            } else {
-                box.className = 'relative w-full max-w-md aspect-square rounded-3xl bg-cyber-card/80 border border-cyber-danger/60 glow-danger p-6 flex flex-col items-center justify-center transition-all duration-500';
-                pill.className = 'absolute top-5 px-4 py-1.5 rounded-full bg-cyber-danger/20 border border-cyber-danger text-cyber-danger text-xs font-mono font-bold tracking-wider uppercase flex items-center gap-2';
-                pill.innerHTML = '<span class="w-2 h-2 rounded-full bg-cyber-danger animate-ping"></span> THREAT DETECTED & BLOCKED';
-                shieldBody.setAttribute('stroke', '#ff2a5f');
-                lockBody.setAttribute('fill', '#ff2a5f');
-                caption.innerHTML = 'ATTACK: <span class="text-cyber-danger font-bold">BLOCKED</span> &bull; SHIELD: <span class="text-cyber-gold font-bold">HOLDING</span>';
+                // Shuffle options array
+                for (let i = optionsWithMeta.length - 1; i > 0; i--) {
+                    let j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithMeta[i], optionsWithMeta[j]] = [optionsWithMeta[j], optionsWithMeta[i]];
+                }
 
-                btnAtk.className = 'px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2.5 bg-cyber-danger text-white shadow-lg shadow-cyber-danger/30 transition-all scale-105';
-                btnDef.className = 'px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2.5 bg-cyber-card text-slate-300 border border-slate-700 hover:border-cyber-emerald transition-all';
+                // Find new correct index after shuffle
+                let newCorrectIndex = optionsWithMeta.findIndex(opt => opt.isOriginalCorrect);
+
+                return {
+                    q: item.q,
+                    options: optionsWithMeta.map(o => o.text),
+                    correct: newCorrectIndex,
+                    explanation: item.explanation
+                };
+            });
+            
+            // Also shuffle the order of questions
+            for (let i = shuffledQuizzes.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [shuffledQuizzes[i], shuffledQuizzes[j]] = [shuffledQuizzes[j], shuffledQuizzes[i]];
             }
         }
 
-        // 2. Interactive Flow Pipeline Node Inspector
-        const flowData = {
-            threat: {
-                step: 'STEP 1',
-                badgeClass: 'bg-cyber-danger/20 text-cyber-danger',
-                title: 'Hackers send malicious packets, viruses, or fake phishing links.',
-                metric: 'RISK LEVEL: HIGH'
-            },
-            firewall: {
-                step: 'STEP 2',
-                badgeClass: 'bg-cyber-gold/20 text-cyber-gold',
-                title: 'Firewall scans incoming traffic and blocks unauthorized IP addresses.',
-                metric: '99.4% THREATS FILTERED'
-            },
-            encryption: {
-                step: 'STEP 3',
-                badgeClass: 'bg-cyber-cyan/20 text-cyber-cyan',
-                title: 'Encryption scrambles readable data into unbreakable secret code.',
-                metric: 'AES-256 BIT LOCK'
-            },
-            server: {
-                step: 'STEP 4',
-                badgeClass: 'bg-cyber-emerald/20 text-cyber-emerald',
-                title: 'Only verified users access the database safely with zero data loss.',
-                metric: 'STATUS: 100% SECURE'
+        function prepareShuffledDebugs() {
+            shuffledDebugs = rawDebugBank.map(item => {
+                let optionsWithMeta = item.options.map((opt, idx) => ({
+                    text: opt,
+                    isOriginalCorrect: idx === item.correct
+                }));
+
+                for (let i = optionsWithMeta.length - 1; i > 0; i--) {
+                    let j = Math.floor(Math.random() * (i + 1));
+                    [optionsWithMeta[i], optionsWithMeta[j]] = [optionsWithMeta[j], optionsWithMeta[i]];
+                }
+
+                let newCorrectIndex = optionsWithMeta.findIndex(opt => opt.isOriginalCorrect);
+
+                return {
+                    title: item.title,
+                    snippet: item.snippet,
+                    bug: item.bug,
+                    options: optionsWithMeta.map(o => o.text),
+                    correct: newCorrectIndex,
+                    explanation: item.explanation
+                };
+            });
+
+            for (let i = shuffledDebugs.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [shuffledDebugs[i], shuffledDebugs[j]] = [shuffledDebugs[j], shuffledDebugs[i]];
             }
-        };
-
-        function selectFlowNode(key) {
-            const data = flowData[key];
-            const badge = document.getElementById('flow-badge');
-            const title = document.getElementById('flow-title');
-            const metric = document.getElementById('flow-metric');
-
-            badge.className = `px-3 py-1 rounded-lg font-mono text-xs font-bold uppercase ${data.badgeClass}`;
-            badge.textContent = data.step;
-            title.textContent = data.title;
-            metric.textContent = data.metric;
         }
 
-        // 2B. Interactive 4 Pillars Presentation Explorer
-        const pillarDetails = {
-            network: {
-                tag: 'PILLAR 01 • NETWORK SECURITY',
-                tagClass: 'bg-cyber-cyan/15 text-cyber-cyan',
-                borderClass: 'border-cyber-cyan',
-                panelBorder: 'border-cyber-cyan/50',
-                title: 'Network Security',
-                caption: 'INTERNET → FIREWALL GATE → SAFE CAMPUS DEVICES',
-                captionColor: 'text-cyber-cyan',
-                points: [
-                    'Acts like a digital security guard for Wi-Fi, routers, and servers.',
-                    'Blocks unauthorized hackers before they enter the internal network.',
-                    'Uses Firewalls & VPNs to create a private, safe connection.'
-                ],
-                example: 'USP campus Wi-Fi firewall blocking suspicious external traffic while keeping student portals safe.',
-                svg: `
-                    <svg class="w-full max-w-xs h-36" viewBox="0 0 280 120" fill="none">
-                        <circle cx="42" cy="60" r="24" fill="#ff2a5f" fill-opacity="0.15" stroke="#ff2a5f" stroke-width="2"/>
-                        <text x="42" y="64" fill="#ff2a5f" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">WEB</text>
-                        <line x1="68" y1="60" x2="118" y2="60" stroke="#ff2a5f" stroke-width="2.5" stroke-dasharray="5 5"/>
-                        <rect x="122" y="22" width="36" height="76" rx="8" fill="#00f0ff" fill-opacity="0.2" stroke="#00f0ff" stroke-width="2.5"/>
-                        <text x="140" y="64" fill="#00f0ff" font-family="monospace" font-size="9" font-weight="bold" text-anchor="middle">WALL</text>
-                        <line x1="162" y1="60" x2="212" y2="60" stroke="#10b981" stroke-width="2.5"/>
-                        <rect x="216" y="36" width="44" height="48" rx="8" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2"/>
-                        <text x="238" y="64" fill="#10b981" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">SAFE</text>
-                    </svg>
-                `
-            },
-            crypto: {
-                tag: 'PILLAR 02 • CRYPTOGRAPHY',
-                tagClass: 'bg-cyber-emerald/15 text-cyber-emerald',
-                borderClass: 'border-cyber-emerald',
-                panelBorder: 'border-cyber-emerald/50',
-                title: 'Cryptography & Encryption',
-                caption: 'READABLE MESSAGE + SECRET KEY = UNBREAKABLE CIPHER',
-                captionColor: 'text-cyber-emerald',
-                points: [
-                    'Converts normal readable text into secret scrambled code (Cipher).',
-                    'Only the person with the matching Secret Key can unlock and read it.',
-                    'Protects passwords, bank cards, and WhatsApp/HTTPS chats.'
-                ],
-                example: 'End-to-end encryption in WhatsApp & HTTPS padlock icons on banking websites.',
-                svg: `
-                    <svg class="w-full max-w-xs h-36" viewBox="0 0 280 120" fill="none">
-                        <rect x="16" y="38" width="66" height="44" rx="8" fill="#00f0ff" fill-opacity="0.15" stroke="#00f0ff" stroke-width="2"/>
-                        <text x="49" y="64" fill="#fff" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle">"HELLO"</text>
-                        <line x1="84" y1="60" x2="112" y2="60" stroke="#10b981" stroke-width="2.5"/>
-                        <circle cx="140" cy="60" r="24" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-width="2.5"/>
-                        <text x="140" y="64" fill="#10b981" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">KEY</text>
-                        <line x1="166" y1="60" x2="194" y2="60" stroke="#10b981" stroke-width="2.5"/>
-                        <rect x="196" y="38" width="68" height="44" rx="8" fill="#f5b800" fill-opacity="0.15" stroke="#f5b800" stroke-width="2"/>
-                        <text x="230" y="64" fill="#f5b800" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle">#9X@7Z</text>
-                    </svg>
-                `
-            },
-            hacking: {
-                tag: 'PILLAR 03 • ETHICAL HACKING',
-                tagClass: 'bg-cyber-gold/15 text-cyber-gold',
-                borderClass: 'border-cyber-gold',
-                panelBorder: 'border-cyber-gold/50',
-                title: 'Ethical Hacking (White-Hat)',
-                caption: 'SCAN WEAKNESS → REPORT BUG → PATCH & SECURE SYSTEM',
-                captionColor: 'text-cyber-gold',
-                points: [
-                    'Good-guy security experts who legally test systems with permission.',
-                    'Find security loopholes before criminal hackers can exploit them.',
-                    'Strengthen apps, websites, and university databases through patching.'
-                ],
-                example: 'Companies paying Bug Bounty rewards to ethical hackers who report login flaws.',
-                svg: `
-                    <svg class="w-full max-w-xs h-36" viewBox="0 0 280 120" fill="none">
-                        <rect x="18" y="34" width="68" height="52" rx="8" fill="#f5b800" fill-opacity="0.15" stroke="#f5b800" stroke-width="2"/>
-                        <text x="52" y="64" fill="#f5b800" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">1. SCAN</text>
-                        <line x1="88" y1="60" x2="108" y2="60" stroke="#f5b800" stroke-width="2.5"/>
-                        <rect x="110" y="34" width="64" height="52" rx="8" fill="#ff2a5f" fill-opacity="0.15" stroke="#ff2a5f" stroke-width="2"/>
-                        <text x="142" y="64" fill="#ff2a5f" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">2. BUG</text>
-                        <line x1="176" y1="60" x2="196" y2="60" stroke="#10b981" stroke-width="2.5"/>
-                        <rect x="198" y="34" width="64" height="52" rx="8" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2"/>
-                        <text x="230" y="64" fill="#10b981" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">3. FIX</text>
-                    </svg>
-                `
-            },
-            radar: {
-                tag: 'PILLAR 04 • THREAT RADAR & SOC',
-                tagClass: 'bg-cyber-danger/15 text-cyber-danger',
-                borderClass: 'border-cyber-danger',
-                panelBorder: 'border-cyber-danger/50',
-                title: 'Threat Radar & 24/7 Defense',
-                caption: 'LIVE AI MONITORING → INSTANT ALERT → AUTO-LOCKDOWN',
-                captionColor: 'text-cyber-danger',
-                points: [
-                    'Monitors computers and servers 24/7 like a live security radar.',
-                    'Uses AI to detect viruses, ransomware, or unusual login attempts.',
-                    'Automatically isolates infected devices in milliseconds.'
-                ],
-                example: 'Bank fraud radar immediately freezing an account when someone logs in from an unknown country.',
-                svg: `
-                    <svg class="w-full max-w-xs h-36" viewBox="0 0 280 120" fill="none">
-                        <circle cx="65" cy="60" r="36" stroke="#ff2a5f" stroke-width="2" stroke-dasharray="4 4"/>
-                        <circle cx="65" cy="60" r="18" stroke="#ff2a5f" stroke-width="1.5"/>
-                        <circle cx="65" cy="60" r="5" fill="#ff2a5f"/>
-                        <line x1="65" y1="60" x2="90" y2="35" stroke="#00f0ff" stroke-width="2.5"/>
-                        <line x1="106" y1="60" x2="146" y2="60" stroke="#ff2a5f" stroke-width="2.5" stroke-dasharray="4 4"/>
-                        <rect x="150" y="34" width="112" height="52" rx="10" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="2"/>
-                        <text x="206" y="57" fill="#10b981" font-family="monospace" font-size="10" font-weight="bold" text-anchor="middle">AUTO-BLOCK</text>
-                        <text x="206" y="72" fill="#fff" font-family="monospace" font-size="9" text-anchor="middle">0.02 SEC</text>
-                    </svg>
-                `
-            }
-        };
+        // Navigation Tab Switcher
+        function switchTab(tabId) {
+            currentTab = tabId;
+            ['dashboard', 'quizzes', 'debugging', 'playground'].forEach(t => {
+                const sec = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`nav-${t}`);
+                if (t === tabId) {
+                    sec.classList.remove('hidden');
+                    if (btn) btn.classList.add('bg-slate-100', 'text-blue-600');
+                } else {
+                    sec.classList.add('hidden');
+                    if (btn) btn.classList.remove('bg-slate-100', 'text-blue-600');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-        function selectPillar(key) {
-            const data = pillarDetails[key];
-            if (!data) return;
+        function mobileMenuToggle() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
 
-            // Reset all 4 card borders, then highlight selected card
-            const allCards = ['network', 'crypto', 'hacking', 'radar'];
-            allCards.forEach(id => {
-                const el = document.getElementById(`pillar-card-${id}`);
-                if (el) {
-                    el.classList.remove('border-cyber-cyan', 'border-cyber-emerald', 'border-cyber-gold', 'border-cyber-danger', '-translate-y-1');
-                    el.classList.add('border-slate-800');
+        // Load Quiz Session
+        function loadQuizSession() {
+            currentQuizIndex = 0;
+            prepareShuffledQuizzes();
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (shuffledQuizzes.length === 0) return;
+            const qData = shuffledQuizzes[currentQuizIndex];
+            const container = document.getElementById('quiz-container');
+            
+            document.getElementById('quiz-progress-text').innerText = `Question ${currentQuizIndex + 1} of ${shuffledQuizzes.length}`;
+            const percent = ((currentQuizIndex + 1) / shuffledQuizzes.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${percent}%`;
+
+            let html = `
+                <div class="space-y-4">
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-800 leading-snug">${currentQuizIndex + 1}. ${qData.q}</h3>
+                    <div class="grid grid-cols-1 gap-3 pt-2" id="quiz-options-list">
+            `;
+
+            qData.options.forEach((opt, idx) => {
+                html += `
+                    <button onclick="selectQuizAnswer(${idx})" id="quiz-opt-${idx}" class="w-full text-left p-4 rounded-2xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 transition-all font-medium text-slate-700 flex items-center justify-between group">
+                        <span class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-xl bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 flex items-center justify-center text-xs font-bold text-slate-600 transition-colors">${String.fromCharCode(65 + idx)}</span>
+                            <span class="text-sm sm:text-base">${opt}</span>
+                        </span>
+                        <i class="fa-solid fa-circle-check text-slate-300 group-hover:text-blue-500 transition-colors"></i>
+                    </button>
+                `;
+            });
+
+            html += `</div><div id="quiz-feedback" class="hidden mt-4 p-4 rounded-2xl text-sm"></div></div>`;
+            container.innerHTML = html;
+
+            document.getElementById('quiz-prev-btn').disabled = currentQuizIndex === 0;
+            document.getElementById('quiz-next-btn').disabled = true;
+        }
+
+        function selectQuizAnswer(selectedIdx) {
+            const qData = shuffledQuizzes[currentQuizIndex];
+            const isCorrect = selectedIdx === qData.correct;
+            totalAttempted++;
+
+            // Disable all options
+            qData.options.forEach((_, idx) => {
+                const btn = document.getElementById(`quiz-opt-${idx}`);
+                btn.disabled = true;
+                if (idx === qData.correct) {
+                    btn.classList.remove('border-slate-200', 'hover:border-blue-400', 'hover:bg-blue-50/50');
+                    btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900');
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.classList.remove('border-slate-200', 'hover:border-blue-400', 'hover:bg-blue-50/50');
+                    btn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900');
                 }
             });
 
-            const activeCard = document.getElementById(`pillar-card-${key}`);
-            if (activeCard) {
-                activeCard.classList.remove('border-slate-800');
-                activeCard.classList.add(data.borderClass, '-translate-y-1');
-            }
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            feedbackDiv.classList.remove('hidden');
 
-            // Update panel styling & content
-            const panel = document.getElementById('pillar-detail-panel');
-            panel.className = `mt-8 rounded-3xl bg-cyber-card border-2 ${data.panelBorder} p-6 sm:p-8 shadow-2xl transition-all duration-300`;
-
-            const tagEl = document.getElementById('pillar-tag');
-            tagEl.className = `px-3 py-1 rounded-full font-mono text-xs font-bold uppercase ${data.tagClass}`;
-            tagEl.textContent = data.tag;
-
-            document.getElementById('pillar-heading').textContent = data.title;
-            document.getElementById('pillar-visual-graphic').innerHTML = data.svg;
-
-            const capEl = document.getElementById('pillar-visual-caption');
-            capEl.className = `mt-3 font-mono text-xs uppercase tracking-wider ${data.captionColor}`;
-            capEl.textContent = data.caption;
-
-            const pointsList = document.getElementById('pillar-points');
-            pointsList.innerHTML = data.points.map(pt => `
-                <li class="flex items-start gap-2.5">
-                    <span class="w-5 h-5 rounded-full bg-cyber-emerald/20 text-cyber-emerald flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold">&#10003;</span>
-                    <span>${pt}</span>
-                </li>
-            `).join('');
-
-            document.getElementById('pillar-example').textContent = data.example;
-        }
-
-        // 3. Live Encryption Visualizer (Text -> Hex Cipher)
-        function updateEncryption() {
-            const input = document.getElementById('plainInput').value || 'USP';
-            const output = document.getElementById('cipherOutput');
-            const hex = Array.from(input)
-                .map(char => (char.charCodeAt(0) ^ 42).toString(16).toUpperCase().padStart(2, '0'))
-                .join(' ');
-            output.textContent = hex;
-        }
-
-        // 4. Visual Password Strength Meter
-        function checkPasswordVisual() {
-            const val = document.getElementById('passInput').value;
-            const bar = document.getElementById('passStrengthBar');
-            const label = document.getElementById('passStrengthLabel');
-            const time = document.getElementById('passCrackTime');
-
-            let score = 0;
-            if (val.length >= 6) score += 25;
-            if (val.length >= 10) score += 25;
-            if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score += 25;
-            if (/[^A-Za-z0-9]/.test(val)) score += 25;
-
-            bar.style.width = `${Math.max(score, 10)}%`;
-
-            if (score <= 25) {
-                bar.className = 'h-full bg-cyber-danger transition-all duration-300';
-                label.className = 'text-xs font-mono font-bold text-cyber-danger uppercase';
-                label.textContent = 'WEAK (EASY TO HACK)';
-                time.textContent = 'Crack Time: Instant';
-            } else if (score <= 75) {
-                bar.className = 'h-full bg-cyber-gold transition-all duration-300';
-                label.className = 'text-xs font-mono font-bold text-cyber-gold uppercase';
-                label.textContent = 'MEDIUM PROTECTION';
-                time.textContent = 'Crack Time: 3 Days';
+            if (isCorrect) {
+                correctAnswersCount++;
+                userScore += 10;
+                userStreak++;
+                totalXp += 25;
+                feedbackDiv.className = "mt-4 p-4 rounded-2xl text-sm bg-emerald-50 border border-emerald-200 text-emerald-800 space-y-1";
+                feedbackDiv.innerHTML = `<div class="font-bold flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-600"></i><span>Correct! (+10 pts, +25 XP)</span></div><p class="text-xs text-emerald-700">${qData.explanation}</p>`;
+                showCustomModal("Correct Answer! 🌟", "Awesome job! You nailed this C++ concept.", "success");
             } else {
-                bar.className = 'h-full bg-cyber-emerald transition-all duration-300';
-                label.className = 'text-xs font-mono font-bold text-cyber-emerald uppercase';
-                label.textContent = 'STRONG SHIELD';
-                time.textContent = 'Crack Time: 400+ Years';
+                userStreak = 0;
+                feedbackDiv.className = "mt-4 p-4 rounded-2xl text-sm bg-rose-50 border border-rose-200 text-rose-800 space-y-1";
+                feedbackDiv.innerHTML = `<div class="font-bold flex items-center space-x-2"><i class="fa-solid fa-circle-xmark text-rose-600"></i><span>Incorrect</span></div><p class="text-xs text-rose-700">${qData.explanation}</p>`;
+                showCustomModal("Not quite right 💡", "Review the explanation below to strengthen your C++ skills.", "error");
+            }
+
+            updateStatsDisplay();
+            document.getElementById('quiz-next-btn').disabled = false;
+        }
+
+        function nextQuizQuestion() {
+            if (currentQuizIndex < shuffledQuizzes.length - 1) {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            } else {
+                showCustomModal("Quiz Completed! 🎉", `You finished all questions with a score of ${userScore} points! Reshuffling for another round.`, "success");
+                loadQuizSession();
             }
         }
 
-        // 5. Subtle Animated Cyber Network Canvas Background
-        window.onload = function() {
-            selectPillar('network');
-            updateEncryption();
-            checkPasswordVisual();
-
-            const canvas = document.getElementById('networkCanvas');
-            const ctx = canvas.getContext('2d');
-            let width, height, particles;
-
-            function resize() {
-                width = canvas.width = canvas.offsetWidth;
-                height = canvas.height = canvas.offsetHeight;
-                initParticles();
+        function prevQuizQuestion() {
+            if (currentQuizIndex > 0) {
+                currentQuizIndex--;
+                renderQuizQuestion();
             }
+        }
 
-            function initParticles() {
-                const count = Math.min(Math.floor(width / 25), 45);
-                particles = Array.from({ length: count }, () => ({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.6,
-                    vy: (Math.random() - 0.5) * 0.6,
-                    r: Math.random() * 2 + 1.5
-                }));
-            }
+        // Load Debug Session
+        function loadDebugSession() {
+            currentDebugIndex = 0;
+            prepareShuffledDebugs();
+            renderDebugChallenge();
+        }
 
-            function draw() {
-                ctx.clearRect(0, 0, width, height);
-                for (let i = 0; i < particles.length; i++) {
-                    const p = particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
+        function renderDebugChallenge() {
+            if (shuffledDebugs.length === 0) return;
+            const dData = shuffledDebugs[currentDebugIndex];
+            const container = document.getElementById('debug-container');
 
-                    if (p.x < 0 || p.x > width) p.vx *= -1;
-                    if (p.y < 0 || p.y > height) p.vy *= -1;
+            document.getElementById('debug-progress-text').innerText = `Challenge ${currentDebugIndex + 1} of ${shuffledDebugs.length}`;
 
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fillStyle = '#00f0ff';
-                    ctx.fill();
+            let html = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-slate-800">${dData.title}</h3>
+                        <span class="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-xs font-bold">Bug Fix Challenge</span>
+                    </div>
+                    <div class="bg-slate-900 rounded-2xl p-4 text-slate-200 code-font text-xs sm:text-sm overflow-x-auto shadow-inner border border-slate-800">
+                        <pre><code>${dData.snippet}</code></pre>
+                    </div>
+                    <p class="text-sm font-semibold text-slate-700">How would you fix or identify this bug?</p>
+                    <div class="grid grid-cols-1 gap-3" id="debug-options-list">
+            `;
 
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const p2 = particles[j];
-                        const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                        if (dist < 130) {
-                            ctx.beginPath();
-                            ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(0, 240, 255, ${0.22 * (1 - dist / 130)})`;
-                            ctx.lineWidth = 1;
-                            ctx.stroke();
-                        }
-                    }
+            dData.options.forEach((opt, idx) => {
+                html += `
+                    <button onclick="selectDebugAnswer(${idx})" id="debug-opt-${idx}" class="w-full text-left p-4 rounded-2xl border border-slate-200 hover:border-pink-400 hover:bg-pink-50/50 transition-all font-medium text-slate-700 flex items-center justify-between group">
+                        <span class="flex items-center space-x-3">
+                            <span class="w-8 h-8 rounded-xl bg-slate-100 group-hover:bg-pink-100 group-hover:text-pink-600 flex items-center justify-center text-xs font-bold text-slate-600 transition-colors">${String.fromCharCode(65 + idx)}</span>
+                            <span class="text-sm sm:text-base">${opt}</span>
+                        </span>
+                        <i class="fa-solid fa-bug text-slate-300 group-hover:text-pink-500 transition-colors"></i>
+                    </button>
+                `;
+            });
+
+            html += `</div><div id="debug-feedback" class="hidden mt-4 p-4 rounded-2xl text-sm"></div>`;
+            
+            // Next debug button
+            html += `
+                <div class="flex justify-end pt-4 border-t border-slate-100">
+                    <button id="debug-next-btn" onclick="nextDebugChallenge()" class="px-6 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-semibold text-sm shadow-md transition-all flex items-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        <span>Next Debug Puzzle</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        function selectDebugAnswer(selectedIdx) {
+            const dData = shuffledDebugs[currentDebugIndex];
+            const isCorrect = selectedIdx === dData.correct;
+            totalAttempted++;
+
+            dData.options.forEach((_, idx) => {
+                const btn = document.getElementById(`debug-opt-${idx}`);
+                btn.disabled = true;
+                if (idx === dData.correct) {
+                    btn.classList.remove('border-slate-200', 'hover:border-pink-400', 'hover:bg-pink-50/50');
+                    btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900');
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.classList.remove('border-slate-200', 'hover:border-pink-400', 'hover:bg-pink-50/50');
+                    btn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900');
                 }
-                requestAnimationFrame(draw);
+            });
+
+            const feedbackDiv = document.getElementById('debug-feedback');
+            feedbackDiv.classList.remove('hidden');
+
+            if (isCorrect) {
+                correctAnswersCount++;
+                userScore += 15;
+                userStreak++;
+                totalXp += 35;
+                feedbackDiv.className = "mt-4 p-4 rounded-2xl text-sm bg-emerald-50 border border-emerald-200 text-emerald-800 space-y-1";
+                feedbackDiv.innerHTML = `<div class="font-bold flex items-center space-x-2"><i class="fa-solid fa-circle-check text-emerald-600"><span>Bug Squashed! (+15 pts, +35 XP)</span></div><p class="text-xs text-emerald-700">${dData.explanation}</p>`;
+                showCustomModal("Bug Fixed Successfully! 🐛✨", "Brilliant debugging skills! You solved the code flaw.", "success");
+            } else {
+                userStreak = 0;
+                feedbackDiv.className = "mt-4 p-4 rounded-2xl text-sm bg-rose-50 border border-rose-200 text-rose-800 space-y-1";
+                feedbackDiv.innerHTML = `<div class="font-bold flex items-center space-x-2"><i class="fa-solid fa-circle-xmark text-rose-600"></i><span>Missed the Bug</span></div><p class="text-xs text-rose-700">${dData.explanation}</p>`;
+                showCustomModal("Keep Practicing 🔍", "Check the bug explanation to sharpen your code review skills.", "error");
             }
 
-            window.addEventListener('resize', resize);
-            resize();
-            draw();
+            updateStatsDisplay();
+            document.getElementById('debug-next-btn').disabled = false;
+        }
+
+        function nextDebugChallenge() {
+            if (currentDebugIndex < shuffledDebugs.length - 1) {
+                currentDebugIndex++;
+                renderDebugChallenge();
+            } else {
+                showCustomModal("All Debug Challenges Completed! 🚀", "You successfully reviewed and fixed all C++ bug puzzles!", "success");
+                loadDebugSession();
+            }
+        }
+
+        // Mini Sandbox simulation
+        function runSandboxCode() {
+            const codeInput = document.getElementById('sandbox-code').value;
+            const outputBox = document.getElementById('sandbox-output');
+            
+            outputBox.innerHTML = `<span class="text-amber-400">⚡ Compiling C++ snippet...</span><br>`;
+            
+            setTimeout(() => {
+                let simulatedOutput = `[Compiler Output v1.2]\n`;
+                if (codeInput.includes("cout")) {
+                    simulatedOutput += `Welcome to Cyber Puzzles!\nYour C++ Score Target: 95\nStatus: Expert Beginner! 🌟\n`;
+                } else {
+                    simulatedOutput += `Compilation successful. Program executed with 0 warnings.\n`;
+                }
+                simulatedOutput += `\nProcess returned 0 (0x0) execution time : 0.014 s`;
+                outputBox.innerHTML = `<span class="text-emerald-400 font-mono whitespace-pre-line">${simulatedOutput}</span>`;
+            }, 400);
+        }
+
+        // Custom Modal UI
+        function showCustomModal(title, message, type) {
+            const modal = document.getElementById('custom-modal');
+            const titleEl = document.getElementById('modal-title');
+            const msgEl = document.getElementById('modal-message');
+            const iconEl = document.getElementById('modal-icon');
+
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+
+            if (type === 'success') {
+                iconEl.className = "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold bg-emerald-50 text-emerald-600";
+                iconEl.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+            } else {
+                iconEl.className = "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl font-bold bg-rose-50 text-rose-600";
+                iconEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('global-streak').innerText = `Streak: ${userStreak}`;
+            document.getElementById('global-score').innerText = `Score: ${userScore} pts`;
+            document.getElementById('stat-xp').innerText = `${totalXp} XP`;
+            
+            const accuracy = totalAttempted > 0 ? Math.round((correctAnswersCount / totalAttempted) * 100) : 0;
+            document.getElementById('stat-accuracy').innerText = `${accuracy}%`;
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            loadQuizSession();
+            loadDebugSession();
+            updateStatsDisplay();
         };
     </script>
 </body>
